@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="pl">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Biblioteka Filmów</title>
+		<style>
+			*,
+			*::before,
+			*::after {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			:root {
+				--border: #2a2a35;
+				--accent: #d4a53c;
+				--green: #5cb87a;
+				--radius: 14px;
+			}
+
+			body {
+				font-family: "Helvetica";
+				background: #0e0e12;
+				color: #e8e6e1;
+				min-height: 100vh;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.app {
+				max-width: 900px;
+				margin: 0 auto;
+				padding: 60px;
+			}
+
+			.app-header {
+				margin-bottom: 48px;
+				position: relative;
+				padding-bottom: 20px;
+			}
+
+			.film-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+				gap: 20px;
+			}
+
+			.film-card {
+				background: #18181f;
+				border: 1px solid var(--border);
+				border-radius: 14px;
+				padding: 28px;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.film-title {
+				margin-bottom: 14px;
+				color: var(--text);
+			}
+
+			.film-year {
+				color: #8a8892;
+				margin-left: 8px;
+			}
+
+			.film-meta {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 16px;
+			}
+
+			.film-genre {
+				display: inline-block;
+				color: var(--accent);
+				background: rgba(212, 165, 60, 0.1);
+				padding: 4px 12px;
+				border-radius: 20px;
+				border: 1px solid rgba(212, 165, 60, 0.2);
+			}
+
+			.film-rating {
+				letter-spacing: 2px;
+				user-select: none;
+			}
+
+			.star-filled {
+				color: var(--accent);
+			}
+
+			.star-empty {
+				color: #3a3a45;
+			}
+
+			.film-watched {
+				color: #5cb87a;
+				margin-top: 14px;
+				padding-top: 14px;
+				border-top: 1px solid var(--border);
+			}
+		</style>
+		<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+		<script
+			src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+			crossorigin></script>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script>
+			const FILMS = [
+				{
+					id: 1,
+					title: "Oppenheimer",
+					year: 2023,
+					genre: "Dramat",
+					rating: 5,
+					watched: true,
+				},
+				{
+					id: 2,
+					title: "Dune: Część druga",
+					year: 2024,
+					genre: "Sci-Fi",
+					rating: 4,
+					watched: false,
+				},
+				{
+					id: 3,
+					title: "Past Lives",
+					year: 2023,
+					genre: "Romans",
+					rating: 5,
+					watched: true,
+				},
+				{
+					id: 4,
+					title: "Poor Things",
+					year: 2023,
+					genre: "Komedia",
+					rating: 4,
+					watched: false,
+				},
+			];
+
+			function RatingStars(props) {
+				var filled = "★".repeat(props.rating);
+				var empty = "☆".repeat(5 - props.rating);
+
+				return React.createElement(
+					"span",
+					{ className: "film-rating" },
+					React.createElement("span", { className: "star-filled" }, filled),
+					React.createElement("span", { className: "star-empty" }, empty),
+				);
+			}
+
+			function FilmCard(props) {
+				return React.createElement(
+					"div",
+					{ className: "film-card" },
+					React.createElement(
+						"h3",
+						{ className: "film-title" },
+						props.title,
+						React.createElement(
+							"span",
+							{ className: "film-year" },
+							"(" + props.year + ")",
+						),
+					),
+
+					React.createElement(
+						"div",
+						{ className: "film-meta" },
+						React.createElement("span", { className: "film-genre" }, props.genre),
+						React.createElement(RatingStars, { rating: props.rating }),
+					),
+
+					props.watched === true
+						? React.createElement("p", { className: "film-watched" }, "✓ Obejrzany")
+						: null,
+				);
+			}
+
+			function App() {
+				return React.createElement(
+					"div",
+					{ className: "app" },
+					React.createElement("h1", { className: "app-header" }, "🎬 Biblioteka Filmów"),
+
+					React.createElement(
+						"div",
+						{ className: "film-grid" },
+						FILMS.map(function (film) {
+							return React.createElement(FilmCard, {
+								key: film.id,
+								title: film.title,
+								year: film.year,
+								genre: film.genre,
+								rating: film.rating,
+								watched: film.watched,
+							});
+						}),
+					),
+				);
+			}
+
+			ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+		</script>
+	</body>
+</html>
